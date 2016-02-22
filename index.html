@@ -1,1 +1,676 @@
-My page
+<!doctype html>
+<html>
+<head>
+
+  <!-- MapBox.js and Leaflet -->
+
+    <link href='http://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.css' rel='stylesheet' />
+    <script type="text/javascript" src='http://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.js'></script>
+
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+
+    <style type="text/css">
+        html {
+            background-color: #F9F7F1; 
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        h4 {
+            font-size: 10pt;
+            margin-top: 0em;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+        }
+
+        p {
+            margin-top: 0em;
+            margin-bottom: 5px;   
+        }
+
+        button {
+            width: 262px;
+            text-align: center;
+        }
+
+        #centerHeader {
+            width: 325px;
+            margin-left: 155px;
+        }
+
+        #grids {
+            float: right;
+            width: 668px;
+            height: 650px;
+        }
+
+        .title {
+            width: 668px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            font-size: 12pt;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        #grids .caption {
+            width: 325px;
+            text-align: center;
+            font-size: 9pt;
+            font-style: italic;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        #grids .left {
+            float: left;
+            margin-left: 5px;
+            text-align: left;
+            margin-top: 10px;
+        }
+
+        #grids .right {
+            float: right;
+            margin-right: 5px;
+            text-align: right;
+            margin-top: 10px;
+        }
+
+        #grids .center {
+            width: 325px;
+            margin-left: 171.5px;
+            margin-top: 10px;
+        }
+
+        #landCoverSlider {
+            width: 100%;
+        }
+
+        #map {
+            background-color: black;
+            width: 667px;
+            height: 650px;
+            max-height: 650px;
+            float: right;
+        }
+
+        #research {
+            width: 667px;
+            height: 650px;
+            max-height: 650px;
+            float: right;
+        }
+
+        img.right {
+            float: right;
+        }
+
+        img.left {
+            float: left;
+        }
+
+        #range {
+            float: right;
+            width: 69.5%;
+        }
+
+        .banner {
+            width: 960px;
+            height: 100px;
+            background-color: black;
+            display: inline-block;
+        }
+
+        .bannerImg {
+            width: 54px; 
+            height: 70px;
+            padding: 15px;
+            float: left;
+        }
+
+        .bannerTitle {
+            color: white;
+            font-size: 18pt;
+            text-align: left;
+            vertical-align: middle;
+            height: 70px;
+            width: 616px;
+            padding: 15px;
+        }
+
+        .buffer {
+            height: 5px;
+        }
+
+        .bufferBig {
+            height: 20px;
+        }
+
+        .caringTable {
+            font-size: 8pt;
+            width: 262px;
+        }
+
+        .caringCentered {
+            text-align: center;
+        }
+
+        .caringCol {
+            width: 131px;
+        }
+
+        .intro {
+            font-size: 10pt;
+            text-align: left;
+        }
+
+        .leftSide {
+            width: 30%;
+            height: 660px;
+            float: left;
+        }
+
+        .pageContent {
+            font: 14px Frutiger, Helvetica, sans-serif;
+            position: relative;
+            margin-right: auto;
+            margin-left: auto;
+            width: 960px;
+        }
+
+        .spacer {
+            height: 5px;
+        }
+
+        .topicGrpah {
+            width: 250px;
+            height: 50px;
+        }
+
+        .topicInfo {
+            height: 515px;
+            overflow: scroll;
+        }
+
+        .topicSite {
+            display: inline;
+            height: 80px;
+            vertical-align: middle;
+        }
+
+        .topicSiteImage {
+            width: 40px;
+            height: 40px;
+        }
+
+        .ui-accordion .ui-accordion-content {
+            padding: 0.75em 0.75em;
+        }
+
+        .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
+            font-size: 0.75em;
+        }
+
+        .backToMap {
+            position: absolute;
+            top: 750px;
+            left: 330px;
+            width: 100px;
+            height: 18px;
+        }
+
+        .thumbnail {
+            width: 20px;
+            height: 20px;
+        }
+
+        #contentInfo {
+            height: 300px;
+        }
+
+    </style>
+    
+</head>
+<body>
+    <div class="pageContent">
+        <div class="banner">
+            <img src="./img/npslogo.png" class="bannerImg">
+            <div class="bannerTitle">The Effects of Climate Change on the<br/>Treeline of Denali National Park and Preserve</div>
+        </div>
+        <div class="buffer">
+            <input id="range" type="range" min="0" max="1.0" step="any" />
+        </div>
+        <div id="textInfo" class="leftSide">
+            <h3>Caring About Climate Change</h3>
+            <div class="topicInfo">
+                <p class="caringTable">
+                    Scientists describe potential future climate through emissions 
+                    scenarios, storylines that represent different social, economic, 
+                    technological, and environmental situations.  These scenarios 
+                    depict greenhouse gas emissions that range from low to high 
+                    intensity.  The characteristics of the described societies 
+                    determine the effects on climate over the next century.
+                </p>
+                <div>
+                    <h4>Temperature Change</h4>
+                    <table class="caringTable caringCentered">
+                        <tr>
+                            <td>Past</td>
+                            <td>Present</td>
+                            <td>Future</td>
+                        </tr>
+                        <tr>
+                            <td>1910-1919</td>
+                            <td>2000-2009</td>
+                            <td>2090-2099</td>
+                        </tr>
+                    </table>
+                    <div class="spacer"></div>
+                    <button id="tpp">Past vs Present</button>
+                    <div class="caringTable">
+                        Temperatures in Alaska have increased 2&deg; C to 4&deg; C in the last several decades.
+                    </div>
+                    <div class="spacer"></div>
+                    <button id="tpa1">Present vs Future (A1B)</button>
+                    <table class="caringTable">
+                        <tr>
+                            <th class="caringCol">Population</th>
+                            <th class="caringCol">Energy Tech</th>
+                        </tr>
+                        <tr>
+                            <td class="caringCol">Continuously increasing until mid-century decline</td>
+                            <td class="caringCol">Efficient tech brings balanced fuel consumption</td>
+                        </tr>
+                    </table>
+                    <div class="spacer"></div>
+                    <button id="tpa2">Present vs Future (A2)</button>
+                    <table class="caringTable">
+                        <tr>
+                            <th class="caringCol">Population</th>
+                            <th class="caringCol">Energy Tech</th>
+                        </tr>
+                        <tr>
+                            <td class="caringCol">Continuously increasing</td>
+                            <td class="caringCol">Slow tech development maintains reliance on fossil fuels</td>
+                        </tr>
+                    </table>
+                    <div class="spacer"></div>
+                    <button id="tpb1">Present vs Future (B1)</button>
+                    <table class="caringTable">
+                        <tr>
+                            <th class="caringCol">Population</th>
+                            <th class="caringCol">Energy Tech</th>
+                        </tr>
+                        <tr>
+                            <td class="caringCol">Continuously increasing until mid-century decline</td>
+                            <td class="caringCol">Clean, sustainable tech makes us less reliant on fossil fuels</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <h3>How We Do Research</h3>
+            <div class="topicInfo">
+                <h4>Biogeography</h4>
+                <div class="caringTable">
+                    Biogeographers use many tools, software, and methodologies to 
+                    address scientific research questions. Specifically, as a 
+                    discipline, biogeographers study the spatial distribution of 
+                    plants and animals in the past, present, and modelled future. 
+                    For example, why do we find mostly white and black spruce trees 
+                    in Denali and not as many deciduous tree species found within 
+                    the park?
+                </div>
+                <div class="spacer"></div>
+                <h4>Remote Sensing</h4>
+                <div class="caringTable">
+                    One way to assess the change in the spatial distribution of 
+                    woody vegetation, like trees, through time, is to examine old 
+                    black and white aerial photography and compare the photography 
+                    to contemporary satellite imagery. The black and white remote 
+                    sensed imagery allows researchers to identify locations within 
+                    Denali where there were no trees or few trees in the past. 
+                    Locations of newly established trees or an increase in density 
+                    of trees within the forest can be identified after an 
+                    examination of the satellite imagery.
+                </div>
+                <div class="spacer"></div>
+                <h4>GIS and Spatial Analysis</h4>
+                <div class="caringTable">
+                    After identifying land cover classes in the black and white 
+                    imagery and the satellite imagery, products from a digital 
+                    elevation model (DEM), like slope angle and slope aspect, aid 
+                    us in determining which topographic factors might influence 
+                    where trees do and do not establish across the landscape. For 
+                    instance, there is commonly more tree establishment on 
+                    south-facing slope aspects in the Northern Hemisphere because 
+                    these slope aspects are warmer and drier than north-facing 
+                    slope aspects. The next time you travel by bus through the 
+                    park, see if you can identify which slopes are north vs. 
+                    south-facing slope aspects based on where you see trees.
+                </div>
+            </div>
+            <h3>What We See</h3>
+            <div class="topicInfo">
+                <div class="caringTable">
+                    Research, including tree coring and GIS analysis, 
+                    is conducted for and at various field sites. Click 
+                    on a site to look at example aerial photographs and 
+                    satellite images used in the GIS analysis.
+                </div>
+                <h4>Field Sites</h4>
+                <div class="caringTable">
+                    <table>
+                        <tr>
+                            <td><img src='./img/site_cd.png' class="thumbnail"></td>
+                            <td><b>Cabin Divide</b> &ndash; This study area is located along the Toklat River</td>
+                        </tr>
+                        <tr>
+                            <td><img src='./img/site_eastFork.png' class="thumbnail"></td>
+                            <td><b>East Fork</b> &ndash; This study area is located along the East Fork Toklat River</td>
+                        </tr>
+                        <tr>
+                            <td><img src='./img/site_healy.png' class="thumbnail"></td>
+                            <td><b>Healy</b> &ndash; This study area is located near the National Park headquarters</td>
+                        </tr>
+                    </table>
+                    <div class="spacer"></div>
+                </div>
+                <div class="spacer"></div>
+                <div class="spacer"></div>
+                <h4 id="contentTitle"></h4>
+                <div id="contentInfo" class="caringTable">
+                    
+                </div>
+            </div>
+        </div>
+        <div id="map"></div>
+        <div id="research" style="display:none;">
+            <div class="title">Research in Denali National Park and Preserve</div>
+            <img src="./img/remoteSensing.png" class="right">
+        </div>
+        <div id="grids" style="display:none;">
+            <div class="title">Using Grids to Measure Landcover Change</div>
+            <div class="header">
+                <span class="left">Aerial Photography </span>
+                <span id="centerHeader">Classified Grids</span>
+                <span class="right">Composite Overlay</span>
+            </div>
+            <input id="landCoverSlider" type="range" min="1" max="3" step="1" value="1">  
+            <div id="leftImg" class="left">
+                <img id="img1950" src="./img/1_1950.png">
+                <div id="caption1950" class="caption">Aerial photo from 1950s</div>
+            </div>          
+            <div id="rightImg" class="right">
+                <img id="img2005" src="./img/2_2005.png">
+                <div id="caption2005" class="caption">Satellite image from mid-2000s</div>
+            </div>
+            <div id="centerImg" class="left" style="display:none;">
+                <img id="imgResult" src="./img/lastStep.png">
+                <div class="caption" style="width:667px; text-align: left;">
+                    <p>
+                        <b>Left</b>: Final composite; green squares show infilling of existing vegetation, and red squares show new establishment of vegetation.
+                    </p>
+                    <p>
+                        <b>Right Top</b>: Aerial photo from 1950s (L) compared to satellite image from mid-2000s (R) showing infilling of existing vegetation.
+                    </p>
+                    <p>
+                        <b>Right Bottom</b>: Aerial photo from 1950s (L) compared to satellite image from mid-2000s (R) showing new establishment of vegetation.
+                    </p>
+                </div>
+            </div>
+            <button id="backToMap" class="backToMap">Back to map</button>
+        </div>
+        <script type="text/javascript">
+
+            var map = null,
+                ctrlZoom = null,
+                lyrFieldSites = null,
+                lyrDenaliPark = L.mapbox.tileLayer("ryanmullins.kdlvj9k9"),
+                lyrTemp1019 = L.mapbox.tileLayer("mss5477.TempHist_1910_1919"),
+                lyrTemp0009 = L.mapbox.tileLayer("mss5477.TempHist_2000_2009"),
+                lyrTempA1B = L.mapbox.tileLayer("mss5477.TempA1B_2090_2099"),
+                lyrTempA2 = L.mapbox.tileLayer("mss5477.TempA2_2090_2099"),
+                lyrTempB1 = L.mapbox.tileLayer("mss5477.TempB1_2090_2099"),
+                legend,
+                hasLegend = true;
+
+            // ---- Initializing Page ----
+
+            map = L.mapbox.map("map", null, {'zoomControl' : false});
+
+            legend = L.control({position: 'bottomright'});
+
+            legend.onAdd = function (map) {
+
+                var div = L.DomUtil.create('div', 'info legend')
+
+                div.innerHTML = '<img id="legendImg" width="50%" style="float:right;" src="./img/LegendTemperature.PNG">';
+
+                return div;
+            };
+
+            map.addControl(legend);
+
+            mapToSwipe(lyrTemp1019,lyrTemp0009);
+
+            // ---- Loading Field Sites Data ----
+
+            $.get('./data/fieldSites.json', function (data) {
+                lyrFieldSites = L.geoJson(data, {
+                    'onEachFeature' : function (feature, layer) {
+
+                        // ---- Icon ----
+
+                        var iconUrl = function () {
+                            if (feature.properties.Site === "Cabin Divide") {
+                                return './img/site_cd.png';
+                            } else if (feature.properties.Site === "Healy South") {
+                                return './img/site_healy.png';
+                            } else {
+                                return './img/site_eastFork.png';
+                            }
+                        }();
+
+                        var icon = L.icon({
+                            'iconUrl' : iconUrl,
+                            'iconSize' : [24, 24]
+                        })
+
+                        layer
+                            .setIcon(icon)
+                            .on('click', function () { switchToGrid(true); });
+                    }
+                })
+            });
+
+            // ---- Accordion Control ----
+
+            $("#textInfo").accordion({
+                'heightStyle' : 'content',
+                'activate' : function (event, ui) {
+                    if (ui.newHeader.text() === "Caring About Climate Change") {
+                        $('#range').css('display', 'inline');
+                        $('#map')
+                            .css('display', 'inline')
+                            .css("height", $('#map').height() - $('#range').height());
+
+                        if (map) {
+                            map.dragging.disable();
+                            map.touchZoom.disable();
+                            map.doubleClickZoom.disable();
+                            map.scrollWheelZoom.disable();
+                            map.addControl(legend);
+
+                            hasLegend = true;
+
+                            if (map.tap) { 
+                                map.tap.disable(); 
+                            }
+
+                            if (ctrlZoom) { 
+                                map.removeControl(ctrlZoom); 
+                                ctrlZoom = null; 
+                            }
+                        }
+
+                        mapToSwipe(lyrTemp1019,lyrTemp0009);
+                    } else {
+                        if (hasLegend) {
+                            map.removeControl(legend);
+                            hasLegend = false;
+                        }
+                        
+                        $('#range').css('display', 'none');
+                        $('#map').css("height", $('#map').height() + $('#range').height());
+                    }
+
+                    if (ui.newHeader.text() === "How We Do Research") {
+                        $("#research").css("display", "block");
+                        $("#map").css("display", "none");
+                    } else {
+                        $("#research").css("display", "none");
+                    }
+
+                    if (ui.newHeader.text() === "What We See") {
+                        switchToGrid(false);
+                    } else {
+                        $("#grids").css('display', 'none');
+                        $("#contentTitle").html("Results");
+                        $("#contentInfo").html("Climate change is responsible for a rapid increase in infilling and new tree establishment throughout the park in the last 50 years. However, why we don&#39;t see trees establishing everywhere? This is function of the physical and biological landscape. In regards to the physical landscape, elevation, incoming solar radiation, and slope angle are predominantly responsible for the spatial patterns we observe throughout the park. For instance, in the northern hemisphere, north-facing slopes receive less incoming solar radiation and are therefore generally cooler than south-facing aspects. This results in lower average treeline elevations on north-facing aspects. When it comes to the biological landscape, competition for light, water, and nutrient resources, with other vegetation, like willow (Salix spp.) or birch (Betula spp) shrubs, also determine where tree species can establish and survive.");                    
+                    }
+                }
+            });
+
+            // ---- Swipe Functionality ----
+
+            $("#tpp").click(function () {
+                mapToSwipe(lyrTemp1019,lyrTemp0009);
+            });
+            $("#tpa1").click(function () {
+                mapToSwipe(lyrTemp0009,lyrTempA1B);
+            });
+            $("#tpa2").click(function () {
+                mapToSwipe(lyrTemp0009,lyrTempA2);
+            });
+            $("#tpb1").click(function () {
+                mapToSwipe(lyrTemp0009,lyrTempB1);
+            });
+
+            function mapToSwipe (layer1, layer2) {
+                var range = document.getElementById('range');
+
+                map.eachLayer(function (layer) {
+                    map.removeLayer(layer);
+                });
+
+                map
+                    .setView(L.latLng(63.50,-153.50), 4)
+                    .addLayer(layer1)
+                    .addLayer(layer2);
+
+                function clip () {
+                    var nw = map.containerPointToLayerPoint([0, 0]),
+                        se = map.containerPointToLayerPoint(map.getSize()),
+                        clipX = nw.x + (se.x - nw.x) * range.value;
+
+                    layer2.getContainer().style.clip = 'rect(' + [nw.y, clipX, se.y, nw.x].join('px,') + 'px)';
+                }
+
+                range['oninput' in range ? 'oninput' : 'onchange'] = clip;
+                map
+                    .off('move')
+                    .on('move', clip);
+                clip();
+            }
+
+            // ---- What We See ----
+
+            $("#backToMap").click(function () { switchToGrid(false); });
+
+            function switchToGrid (shouldSwitch) {
+
+                if (shouldSwitch) {
+                    $("#grids").css("display", "inline");
+                    $("#map").css("display", "none");
+                    $("#contentTitle").html("Aerial Photography<br/>and Satellite Imagery");
+                    $("#contentInfo").html("<p>Black and white imagery was flown by the United States Air Force in the mid-1950s. Color IKONOS satellite images were taken in the mid-2000s.</p><p>Remotely sensed imagery from the mid-1950s and mid-2000s show a 10-30% increase in infilling and upslope advancement of trees in several locations within the park. This imagery also showed an average of 100 m upslope advancement of trees on north-facing slopes, and 200 m on south-facing slopes</p><p>East Fork Image Specifics:<ul><li>Black and white photo &ndash; July 25, 1953</li><li>IKONOS satellite image &ndash; July 20, 2005</li></ul></p>");
+                } else {
+                    $("#grids").css("display", "none");
+                    $("#map").css("display", "inline");
+                    $("#contentTitle").html("Results");
+                    $("#contentInfo").html("Climate change is responsible for a rapid increase in infilling and new tree establishment throughout the park in the last 50 years. However, why we don&#39;t see trees establishing everywhere? This is function of the physical and biological landscape. In regards to the physical landscape, elevation, incoming solar radiation, and slope angle are predominantly responsible for the spatial patterns we observe throughout the park. For instance, in the northern hemisphere, north-facing slopes receive less incoming solar radiation and are therefore generally cooler than south-facing aspects. This results in lower average treeline elevations on north-facing aspects. When it comes to the biological landscape, competition for light, water, and nutrient resources, with other vegetation, like willow (Salix spp.) or birch (Betula spp) shrubs, also determine where tree species can establish and survive.");                    
+
+                    map.eachLayer(function (layer) {
+                        map.removeLayer(layer);
+                    });
+
+                    map
+                        .off('move')
+                        .eachLayer(function (layer) {
+                            map.removeLayer(layer)
+                        })
+                        .setView(L.latLng(63.23115344024988, -150.61706542968747), 8)
+                        .addLayer(lyrDenaliPark)
+                        .addLayer(lyrFieldSites)
+                        .invalidateSize();
+
+                    if (!ctrlZoom) { 
+                        ctrlZoom = L.control.zoom(); 
+                        map.addControl(ctrlZoom);
+                    }
+
+                    map.dragging.enable();
+                    map.touchZoom.enable();
+                    map.doubleClickZoom.enable();
+                    map.scrollWheelZoom.enable();
+                    if (map.tap) { map.tap.enable(); }
+                }
+            }
+
+            // ---- Grid Exploration ----
+
+            $("#landCoverSlider").change(function () {
+
+                if ($("#landCoverSlider").val() == 1) {
+                    $("#img1950").attr("src", "./img/1_1950.png");
+                    $("#img2005").attr("src", "./img/2_2005.png");
+                    $("#caption1950").text("Ariel photo from mid-1950s");
+                    $("#caption2005").text("Satellite image from mid-2000s");
+                    $("#contentTitle").html("Aerial Photography<br/>and Satellite Imagery");
+                    $("#contentInfo").html("<p>Black and white imagery was flown by the United States Air Force in the mid-1950s. Color IKONOS satellite images were taken in the mid-2000s.</p><p>Remotely sensed imagery from the mid-1950s and mid-2000s show a 10-30% increase in infilling and upslope advancement of trees in several locations within the park. This imagery also showed an average of 100 m upslope advancement of trees on north-facing slopes, and 200 m on south-facing slopes</p><p>East Fork Image Specifics:<ul><li>Black and white photo &ndash; July 25, 1953</li><li>IKONOS satellite image &ndash; July 20, 2005</li></ul></p>");
+                }
+
+                if ($("#landCoverSlider").val() == 2) {
+                    $("#img1950").attr("src", "./img/3.1_with background.png");
+                    $("#img2005").attr("src", "./img/4.1_with background.png");
+                    $("#caption1950").text("Landcover change grid atop photo from mid-1950s");
+                    $("#caption2005").text("Landcover change grid atop image from mid-2000s");
+                    $("#contentTitle").html("Griding and Classification");
+                    $("#contentInfo").html("<p>Grid cells were placed across the landscape at each study site location. Land cover classes were identified within each grid cell in both the black and white aerial photography and the IKONOS satellite imagery. Topographic variables, including elevation, slope degrees, slope aspect, and incoming solar radiation, were also identified for each grid cell.</p>");
+                }
+
+                if ($("#landCoverSlider").val() == 3) {
+                    $("#leftImg").css("display", "none");
+                    $("#rightImg").css("display", "none");
+                    $("#centerImg").css("display", "inline-block");
+                    $("#contentTitle").html("Looking at Infilling<br/>and Upslope Advancement");
+                    $("#contentInfo").html("<p>Infilling: The increase of tree establishment over the last 50 years in locations where trees were already able to establish. These locations were either open forests or permafrost zones that are melting as a result of rising temperatures.</p><p>Upslope Advancement: These are locations of new tree establishment at higher elevations on a mountain where trees were once not able to establish because temperatures were too cold. Over the last 50 years, increasing temperatures are shifting treelines to higher elevations in the mountains.</p>");
+                } else {
+                    $("#leftImg").css("display", "inline-block");
+                    $("#rightImg").css("display", "inline-block");
+                    $("#centerImg").css("display", "none");
+                }
+            });
+
+        </script>
+    </div>
+</body>
+</html>
